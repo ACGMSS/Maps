@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       #map {
+        height: 400px;
+        width: 100%;
+       }
+
+       #searchTextField {
+         width: 300px;
+         font-size: 20px;
+         margin-bottom: 20px;
+       }
+    </style>
+  </head>
+  <body>
+    
+    <h2>TA Locator</h2>
+    <div>
+      <input type="text" id="searchTextField">
+    </div>
+    
+    <div id="map"></div>
+    
+    <script>
+      function initMap() {
+        var mapOptions = {
+          zoom: 15,
+          center: {lat: 29.643890, lng: -82.3500},
+          styles:[
+    {
+        "stylers": [
+            {
+                "saturation": 100
+            },
+            {
+                "gamma": 0.6
+            }
+        ]
+    }
+]      
+        };
+        var targetElem = document.getElementById('map');
+        var map = new google.maps.Map(targetElem, mapOptions);
+        var markers = []
+
+       
+        // Autocomplete input
+        var input = document.getElementById('searchTextField');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+
+        // Listen to autocomplete input
+        autocomplete.addListener('place_changed', function() {
+
+          var place = autocomplete.getPlace();
+          if (!place.geometry) {
+            // User entered the name of a place that was not suggested and
+            
+            window.alert("No details available for input: '" + place.name + "'. Select one of the results.");
+            return;
+          }
+          //clear map markers if new selection is inputted
+          if(markers.length!=0){
+              markers[i].setMap(null);
+          }
+          firstmarkerimg = "https://i.imgur.com/KrPofH4.png"
+    
+          var marker = new google.maps.Marker({ map: map, position: place.geometry.location, animation: google.maps.Animation.DROP, icon: firstmarkerimg });
+          markers.push(marker)
+        });
+
+      }
+    </script>
+
+    <!-- Loads maps library (with places library) and then calls initMap() -->
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap&key=AIzaSyDezKFJ2qceq7fweXBOhZ2BJYNbUxPCP6g">
+    </script>
+
+  </body>
+</html>
